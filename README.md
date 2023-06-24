@@ -1,3 +1,4 @@
+* use MediatR for CQRS pattern
 * use FluentValidation to validate requests
 * use EF Core, Code-First Approach, Automatic Code First Migrations and Fluent API
 * Response Caching
