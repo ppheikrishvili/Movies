@@ -1,0 +1,37 @@
+.NET Task:
+
+We need to write the module using Onion/Clean architecture for an existing system
+In that module we have to integrate with IMDB API, to search the movies, TV Series, etc
+Consider that the user management is already implemented in an existing system
+
+To do functionality:
+1. ability to search movie by expression (title, year, etc.) (using integration with IMDB API)
+2. ability to add searched movie to watchlist for the user (one of the input parameters must be UserId)
+3. ability to mark the movie as watched in the watchlist
+4. ability to get all of the watchlist items for the user
+ 
+Technical requirements:
+* use MediatR for CQRS pattern
+* use FluentValidation to validate requests
+* use EF Core, Code-First Approach, Automatic Code First Migrations and Fluent API
+* use MS SQL database
+* use Swagger
+* use Github for source control
+ 
+k_5ldd8aec
+
+IMDB API documentation - https://imdb-api.com/api
+API Key can be obtained after registration: https://imdb-api.com/Identity/Account/Register
+
+ 
+Corezoid Task:
+Quick Start - https://doc.corezoid.com/docs/quick-start
+
+We need to create a process to determine if an actor/actress starring in a movie has won an Oscar (process can be created on https://admin.corezoid.com)
+
+To do functionality:
+1. Call GET https://imdb-api.com/{lang?}/API/SearchMovie/{apiKey}/{expression} to search a movie by title (we are interested only in the first movie)
+2. Call GET https://imdb-api.com/{lang?}/API/Title/{apiKey}/{id} to get information about the movie, including stars (we are interested only in the first actor/actress)
+3. GET https://imdb-api.com/{lang?}/API/NameAwards/{apiKey}/{id} to get information about the awards for the actor/actress
+
+The outcome of the process should be End:Success if the actor/actress has won an Oscar, otherwise the outcome should be End:Error
