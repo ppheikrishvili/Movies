@@ -10,8 +10,8 @@ public static class ConfigureDbContext
     public static void AddDbContext(this IServiceCollection serviceCollection, IConfiguration configuration)
     {
         serviceCollection.AddDbContext<AppDBContext>(options =>
-            options.UseSqlServer(configuration.GetConnectionString("ConnectionString")
-                , b => b.MigrationsAssembly(typeof(AppDBContext).Assembly.FullName)));
+            options.UseSqlServer(configuration.GetConnectionString("ConnectionString"),
+                b => b.MigrationsAssembly(typeof(AppDBContext).Assembly.FullName)));
 
         using ServiceProvider serviceProvider = serviceCollection.BuildServiceProvider();
         var context = serviceProvider.GetRequiredService<AppDBContext>();

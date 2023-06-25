@@ -17,12 +17,11 @@ public sealed class AppDBContext : DbContext
     }
 
     public AppDBContext(DbContextOptions options) : base(options)
-    { 
+    {
         ChangeTracker.LazyLoadingEnabled = false;
         ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder) =>
         ApplyEntityMapsFromAssembly().ForEach(t => Activator.CreateInstance(t, modelBuilder));
-
 }

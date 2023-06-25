@@ -36,7 +36,6 @@ builder.Services.AddDbContext(builder.Configuration);
 var app = builder.Build();
 
 
-
 //var dbContext = app.ServiceProvider
 //    .GetRequiredService<AppDbContext>();
 

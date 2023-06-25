@@ -18,10 +18,10 @@ public static class ConfigureServiceExt
 
 
     public static void AddMedialR(this IServiceCollection serviceCollection) =>
-        serviceCollection.AddMediatR(cfg => 
+        serviceCollection.AddMediatR(cfg =>
             cfg.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies()));
 
-    
+
     //public static WebApplication ApplyMigrations(this WebApplication app)
     //{
     //    using var scope = app.Services.CreateScope();
@@ -29,6 +29,4 @@ public static class ConfigureServiceExt
     //    db.Database.Migrate();
     //    return app;
     //}
-
-
 }

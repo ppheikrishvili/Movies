@@ -4,7 +4,8 @@ public static class StringExtensions
 {
     public static bool IsNumeric(this string text) => double.TryParse(text, out _);
 
-    public static decimal ToDecimal(this string text) => decimal.TryParse(text, out decimal outDecimal) ? outDecimal : 0;
+    public static decimal ToDecimal(this string text) =>
+        decimal.TryParse(text, out decimal outDecimal) ? outDecimal : 0;
 
     public static decimal ToInt(this string text) => int.TryParse(text, out int outInt) ? outInt : 0;
 

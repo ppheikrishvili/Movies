@@ -10,7 +10,7 @@ public class ActorAwardMap : IBaseMapModel
     public ActorAwardMap(ModelBuilder mBuilder)
     {
         EntityTypeBuilder<ActorAward> entityBuilder = mBuilder.Entity<ActorAward>();
-        entityBuilder.HasKey(x => new { x.ActorId, x.MovieId, x.AwardName });
+        entityBuilder.HasKey(x => new {x.ActorId, x.MovieId, x.AwardName});
         entityBuilder.HasOne(s => s.Actor).WithMany(i =>
             i.ActorAwards).HasForeignKey(h => h.ActorId).HasPrincipalKey(p => p.id);
         entityBuilder.HasOne(s => s.Movie).WithMany(i =>

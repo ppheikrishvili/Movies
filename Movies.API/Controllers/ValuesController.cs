@@ -21,7 +21,7 @@ namespace Movies.API.Controllers
         [ResponseCache(CacheProfileName = "Cache2Mins")]
         public IEnumerable<string> Get()
         {
-            return new[] { "value1", "value2" };
+            return new[] {"value1", "value2"};
         }
 
         // GET api/<ValuesController>/5
