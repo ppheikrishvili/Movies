@@ -14,6 +14,7 @@ public static class ConfigureServiceExt
         serviceCollection.AddValidatorsFromAssemblyContaining<ActorValidation>();
         serviceCollection.AddValidatorsFromAssemblyContaining<MovieValidation>();
         serviceCollection.AddValidatorsFromAssemblyContaining<ActorAwardValidation>();
+        serviceCollection.AddValidatorsFromAssemblyContaining<ImdbUserValidation>();
     }
 
 

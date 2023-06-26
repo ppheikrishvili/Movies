@@ -2,6 +2,7 @@
 using Movies.Domain.Entity;
 
 namespace Movies.Application.Validators;
+
 public class ActorAwardValidation : AbstractValidator<ActorAward>
 {
     public ActorAwardValidation()
