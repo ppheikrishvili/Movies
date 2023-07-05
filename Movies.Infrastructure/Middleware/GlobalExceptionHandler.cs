@@ -18,7 +18,7 @@ public class GlobalExceptionHandler : IMiddleware
     private static async Task HandleExceptionAsync(HttpContext context, Exception ex,
         ILogger<GlobalExceptionHandler>? logger)
     {
-        string errorMessage = await ex.ToErrorStr() ?? "";
+        string errorMessage = await ex.ToErrorStrAsync() ?? "";
 
         logger?.LogError($"{nameof(Exception)} details: {errorMessage}");
 

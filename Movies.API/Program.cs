@@ -26,12 +26,17 @@ builder.Services.AddControllers(options =>
 builder.Services.AddFluent();
 builder.Services.AddMedialR();
 
+builder.Services.AddVersion();
+builder.Services.AddMvcCore().AddApiExplorer();
+builder.Services.AddVersionedApi();
+
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwagger();
 
 builder.Services.AddResponseCaching();
 
 builder.Services.AddDbContext(builder.Configuration);
+
 
 var app = builder.Build();
 

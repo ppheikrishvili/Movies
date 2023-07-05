@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Movies.API.Controllers.Base;
 using Movies.Persistence;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace Movies.API.Controllers
+namespace Movies.API.Controllers.v1
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class ValuesController : ControllerBase
+    [ApiVersion("1.0")]
+    public class ValuesController : BaseController
     {
         private AppDBContext appDBContext;
 
