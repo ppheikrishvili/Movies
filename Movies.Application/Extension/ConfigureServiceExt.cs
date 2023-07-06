@@ -1,6 +1,8 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Movies.Application.Validators;
@@ -63,6 +65,45 @@ public static class ConfigureServiceExt
             });
         });
     }
+
+
+    public static void AddCorsExt(this IServiceCollection services)
+    {
+        services.AddCors(options =>
+        {
+            options.AddPolicy("AllowAll",
+                builder =>
+                {
+                    builder.AllowAnyOrigin()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
+        });
+    }
+
+
+    public static void AddControllersExt(this IServiceCollection services, WebApplicationBuilder builder)
+    {
+        services.AddControllers(options =>
+        {
+            //options.CacheProfiles.Add("Cache2Mins",
+            //    new CacheProfile()
+            //    {
+            //        Duration = 120,
+            //        Location = ResponseCacheLocation.Any
+            //    });
+            var cacheProfiles = builder.Configuration
+                .GetSection("CacheProfiles")
+                .GetChildren();
+            foreach (var cacheProfile in cacheProfiles)
+            {
+                options.CacheProfiles
+                    .Add(cacheProfile.Key,
+                        cacheProfile.Get<CacheProfile>() ?? throw new InvalidOperationException());
+            }
+        });
+    }
+
 
     //public static WebApplication ApplyMigrations(this WebApplication app)
     //{

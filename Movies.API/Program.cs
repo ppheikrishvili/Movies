@@ -1,27 +1,14 @@
+using MediatR;
+using Movies.Application.Behaviors;
 using Movies.Application.Extension;
 using Movies.Persistence.Common.Extension;
-using Microsoft.AspNetCore.Mvc;
+
+
+//https://learn.microsoft.com/en-us/dotnet/architecture/microservices/microservice-ddd-cqrs-patterns/microservice-application-layer-implementation-web-api
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers(options =>
-{
-    //options.CacheProfiles.Add("Cache2Mins",
-    //    new CacheProfile()
-    //    {
-    //        Duration = 120,
-    //        Location = ResponseCacheLocation.Any
-    //    });
-    var cacheProfiles = builder.Configuration
-        .GetSection("CacheProfiles")
-        .GetChildren();
-    foreach (var cacheProfile in cacheProfiles)
-    {
-        options.CacheProfiles
-            .Add(cacheProfile.Key,
-                cacheProfile.Get<CacheProfile>() ?? throw new InvalidOperationException());
-    }
-});
+builder.Services.AddControllersExt(builder);
 
 builder.Services.AddFluent();
 builder.Services.AddMedialR();
@@ -33,7 +20,11 @@ builder.Services.AddVersionedApi();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwagger();
 
+builder.Services.AddCorsExt();
+
 builder.Services.AddResponseCaching();
+
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
 builder.Services.AddDbContext(builder.Configuration);
 
