@@ -1,6 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using Movies.API.Controllers.Base;
+using Movies.Application.Features.Queries;
+using Movies.Domain.Entity;
 using Movies.Persistence;
+using Movies.Persistence.Data.Repository;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -11,17 +15,22 @@ namespace Movies.API.Controllers.v1
     {
         private AppDBContext appDBContext;
 
-        public ValuesController(AppDBContext _appDBContext)
+        public ValuesController(AppDBContext _appDBContext, IMediator mediator)
         {
             appDBContext = _appDBContext;
+            _mediator = mediator;
         }
 
         // GET: api/<ValuesController>
         [HttpGet]
         [ResponseCache(CacheProfileName = "Cache2Mins")]
-        public IEnumerable<string> Get()
+        public async Task<IEnumerable<Actor>?> Get()
         {
-            return new[] {"value1", "value2"};
+            //. GetElementListHandler<Actor>(new Base<Actor>()
+            //var t = await _mediator.Send(new GetElementList<Actor>.GetElementListQuery(), CancellationToken.None);
+            var t = await _mediator?.Send(new GetElementListQuery<Actor>(b => b.id != null), CancellationToken.None)!;
+
+            return null;
         }
 
         // GET api/<ValuesController>/5

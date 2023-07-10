@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Futearies\" />
+    <Folder Include="Features\Commands\" />
   </ItemGroup>
 
 </Project>

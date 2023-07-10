@@ -22,7 +22,7 @@ public static class ConfigureServiceExt
     }
 
 
-    public static void AddMedialR(this IServiceCollection serviceCollection) =>
+    public static void AddMedialRExt(this IServiceCollection serviceCollection) =>
         serviceCollection.AddMediatR(cfg =>
             cfg.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies()));
 

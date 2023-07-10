@@ -36,9 +36,6 @@ public class GlobalExceptionHandler : IMiddleware
     {
         try
         {
-            //var F = await new StreamReader(context.Response.Body).ReadToEndAsync();
-            _logger?.Log(LogLevel.Information,
-                $"{await new StreamReader(context.Response.Body).ReadToEndAsync().ConfigureAwait(false)}");
             await next(context);
         }
         catch (Exception exceptionObj)
