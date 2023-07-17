@@ -9,11 +9,9 @@ public interface IBase<T> where T : IEntity
 
     IQueryable<T> DbEntity();
 
-    Task<List<T>> GetListAsync(Expression<Func<T, bool>>? condLambda, CancellationToken token = default);
+    Task<List<T>> GetListAsync(Expression<Func<T, bool>>? condLambda = null, CancellationToken token = default);
 
     Task<T?> FirstOrDefaultAsync(Expression<Func<T, bool>>? condLambda = null, CancellationToken token = default);
-
-    Task<IList<T>> SelectFullActiveList(CancellationToken token = default);
 
     Task<T?> ElementByIdAsync(object id);
 

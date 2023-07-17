@@ -19,12 +19,9 @@ public class GlobalExceptionHandler : IMiddleware
         ILogger<GlobalExceptionHandler>? logger)
     {
         string errorMessage = await ex.ToErrorStrAsync() ?? "";
-
         logger?.LogError($"{nameof(Exception)} details: {errorMessage}");
-
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
-        //await context.Response.WriteAsync(result).ConfigureAwait(false);
         await context.Response.WriteAsync(JsonConvert.SerializeObject(new
         {
             StatusCode = HttpStatusCode.InternalServerError,

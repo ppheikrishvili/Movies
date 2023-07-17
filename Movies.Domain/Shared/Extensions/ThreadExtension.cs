@@ -6,10 +6,11 @@ public static class ThreadExtension
 {
     public static async Task RunExTask<T>(this Action<T> act, IEnumerable<T> list, CancellationToken token = default)
     {
-        var throttler = new SemaphoreSlim(Convert.ToInt32(Math.Ceiling(Environment.ProcessorCount * 0.75 * 2.0)));
-        var repLists = list.Chunk(10000).AsParallel().WithDegreeOfParallelism(
+        SemaphoreSlim throttler =
+            new SemaphoreSlim(Convert.ToInt32(Math.Ceiling(Environment.ProcessorCount * 0.75 * 2.0)));
+        List<T[]> repLists = list.Chunk(10000).AsParallel().WithDegreeOfParallelism(
             Convert.ToInt32(Math.Ceiling(Environment.ProcessorCount * 0.75 * 2.0))).ToList();
-        var tasks = from partition in repLists.Select((jobs, i) => new {jobs, i})
+        IEnumerable<Task> tasks = from partition in repLists.Select((jobs, i) => new {jobs, i})
             select Task.Run(async () =>
             {
                 try
@@ -40,7 +41,7 @@ public static class ThreadExtension
 
         int chunkCount = (processorUsed > list.Length) ? 1 : list.Length / processorUsed;
 
-        var tasks = from part in Partitioner.Create(list.ToList(), true)
+        IEnumerable<Task> tasks = from part in Partitioner.Create(list.ToList(), true)
                 .AsParallel().WithDegreeOfParallelism(processorUsed).Chunk(chunkCount)
             //.Select((jobs, i) => new {jobs, i})
             select

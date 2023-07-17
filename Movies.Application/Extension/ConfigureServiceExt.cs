@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Movies.Application.Validators;
 
+
 namespace Movies.Application.Extension;
 
 public static class ConfigureServiceExt
@@ -101,6 +102,17 @@ public static class ConfigureServiceExt
                     .Add(cacheProfile.Key,
                         cacheProfile.Get<CacheProfile>() ?? throw new InvalidOperationException());
             }
+        });
+    }
+
+
+    public static void AddHttpClientExt(this IServiceCollection serviceCollection, IConfiguration configuration)
+    {
+        serviceCollection.AddHttpClient("IMDBBaseClient", config =>
+        {
+            config.BaseAddress = new Uri(configuration.GetSection("IMDBBaseAddress")?.Value ?? "");
+            config.Timeout = new TimeSpan(0, 0, 30);
+            config.DefaultRequestHeaders.Clear();
         });
     }
 

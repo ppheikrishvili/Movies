@@ -1,6 +1,4 @@
-﻿
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using Microsoft.EntityFrameworkCore;
 using Movies.Domain.Entity;
 using Movies.Domain.Interface;
 
@@ -10,8 +8,6 @@ public class ActorMap : IBaseMapModel
 {
     public ActorMap(ModelBuilder mBuilder)
     {
-        EntityTypeBuilder<Actor> entityBuilder = mBuilder.Entity<Actor>();
-
-
+        mBuilder.Entity<Actor>();
     }
 }

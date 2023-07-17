@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using MediatR;
 using Movies.Application.Behaviors;
 using Movies.Application.Extension;
@@ -15,7 +16,6 @@ builder.Services.AddControllersExt(builder);
 builder.Services.AddMedialRExt();
 builder.Services.AddFluent();
 
-
 builder.Services.AddVersion();
 builder.Services.AddMvcCore().AddApiExplorer();
 builder.Services.AddVersionedApi();
@@ -25,16 +25,29 @@ builder.Services.AddSwagger();
 
 builder.Services.AddTransient<GlobalExceptionHandler>();
 
-
 builder.Services.AddCorsExt();
+
+builder.Services.AddHttpClientExt(builder.Configuration);
 
 builder.Services.AddResponseCaching();
 
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
+//builder.Services.AddTransient(typeof(IHttpClientFactory), typeof(HttpClientFactory));
+
+
 builder.Services.AddDbContext(builder.Configuration);
 
 builder.Services.AddTransient(typeof(IBase<>), typeof(Base<>));
+
+builder.Services.AddControllersWithViews().AddJsonOptions(opt =>
+{
+    opt.JsonSerializerOptions.PropertyNamingPolicy = null;
+    opt.JsonSerializerOptions.AllowTrailingCommas = true;
+    opt.JsonSerializerOptions.NumberHandling = JsonNumberHandling.AllowReadingFromString |
+                                               JsonNumberHandling.WriteAsString;
+    opt.JsonSerializerOptions.IncludeFields = true;
+});
 
 
 //IServiceProvider s = builder.Services;
