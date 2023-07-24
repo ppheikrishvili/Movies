@@ -16,6 +16,10 @@ public static class ConfigureDbContext
             serviceCollection.AddDbContext<AppDBContext>(options =>
                 options.UseInMemoryDatabase("MovieIMDB"));
             serviceCollection.AddTransient<ITestSeedsService, TestSeedsService>();
+
+            using ServiceProvider serviceProvider = serviceCollection.BuildServiceProvider();
+            var context = serviceProvider.GetRequiredService<AppDBContext>();
+            context.Database.EnsureCreated();
         }
         else
         {

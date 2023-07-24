@@ -25,11 +25,15 @@ namespace Movies.API.Controllers.v1
 
 
         [HttpGet("GetUserById")]
-        [ResponseCache(CacheProfileName = "Cache3Mins")]
-        public async Task<ImdbUser?> GetUserById(string userName)
+        //[ResponseCache(CacheProfileName = "Cache3Mins")]
+        public async Task<ImdbUser> GetUserById(string userName)
         {
-            return (await _mediator?.Send(new GetElementListQuery<ImdbUser>(i => i.Name == userName),
-                CancellationToken.None)!).FirstOrDefault();
+            //return (await _mediator?.Send(new GetElementListQuery<ImdbUser>(i => i.Name == userName),
+            //    CancellationToken.None)!).FirstOrDefault();
+            return await _mediator?.Send(new GetSingleElementQuery<ImdbUser>(i => i.Name == userName),
+                CancellationToken.None)!;
+
+
             //var t = await _mediator?.Send(
             //    new GetMovieFromSourceQuery<Movie>("", "IMDBBaseClient", "API/SearchMovie/pk_0acwtqe291brqbd3d"),
             //    CancellationToken.None)!;

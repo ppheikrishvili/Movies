@@ -16,11 +16,10 @@ public class GlobalExceptionHandler : IMiddleware
         _logger = logger;
     }
 
-    private static async Task HandleExceptionAsync(HttpContext context, Exception ex,
-        ILogger<GlobalExceptionHandler>? logger)
+    private async Task HandleExceptionAsync(HttpContext context, Exception ex)
     {
         string errorMessage = await ex.ToErrorStrAsync() ?? "";
-        logger?.LogError($"{nameof(Exception)} details: {errorMessage}");
+        _logger?.LogError($"{nameof(Exception)} details: {errorMessage}");
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
         await context.Response.WriteAsync(JsonConvert.SerializeObject(new
@@ -32,11 +31,11 @@ public class GlobalExceptionHandler : IMiddleware
 
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
+        Stream originalBodyStream = context.Response.Body;
         try
         {
             string requestStr = await FormatRequest(context.Request);
             using var responseBody = new MemoryStream();
-            Stream originalBodyStream = context.Response.Body;
             context.Response.Body = responseBody;
             await next(context);
             _logger?.Log(LogLevel.Information,
@@ -45,7 +44,8 @@ public class GlobalExceptionHandler : IMiddleware
         }
         catch (Exception exceptionObj)
         {
-            await HandleExceptionAsync(context, exceptionObj, _logger).ConfigureAwait(false);
+            context.Response.Body = originalBodyStream;
+            await HandleExceptionAsync(context, exceptionObj).ConfigureAwait(false);
         }
     }
 

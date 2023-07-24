@@ -32,10 +32,10 @@ public sealed class AppDBContext : DbContext
 
         ApplyEntityMapsFromAssembly().ForEach(t => Activator.CreateInstance(t, modelBuilder));
 
-        var _mockData = this.Database.GetService<ITestSeedsService>();
-        if (_mockData != null)
+        var _seedData = this.Database.GetService<ITestSeedsService>();
+        if (_seedData != null)
         {
-            var seedImdbUsers = _mockData.GetImdbUsers(10);
+            var seedImdbUsers = _seedData.GetImdbUsers(10);
             modelBuilder.Entity<ImdbUser>().HasData(seedImdbUsers);
         }
     }
