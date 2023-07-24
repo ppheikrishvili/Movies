@@ -1,5 +1,6 @@
 ﻿using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
+using Movies.Domain.Entity;
 using Movies.Domain.Interface;
 using Movies.Domain.Shared.Enums;
 
@@ -26,10 +27,19 @@ public class Base<T> : IBase<T> where T : class, IEntity
     public async Task<List<T>> GetListAsync(Expression<Func<T, bool>>? condLambda = null,
         CancellationToken token = default)
     {
-        if (condLambda != null)
-            return await DbSetEntity.AsNoTracking().Where(condLambda).ToListAsync(cancellationToken: token)
-                .ConfigureAwait(false);
-        return await DbSetEntity.AsNoTracking().ToListAsync(cancellationToken: token).ConfigureAwait(false);
+        try
+        {
+            await AppContext.Database.EnsureCreatedAsync(token);
+            if (condLambda != null)
+                return await DbSetEntity.AsNoTracking().Where(condLambda).ToListAsync(cancellationToken: token)
+                    .ConfigureAwait(false);
+            return await DbSetEntity.AsNoTracking().ToListAsync(cancellationToken: token).ConfigureAwait(false);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
     }
 
     public async Task<T?> FirstOrDefaultAsync(Expression<Func<T, bool>>? condLambda = null,

@@ -31,3 +31,10 @@ public class GetElementListHandlerActorAward : GetElementListHandler<ActorAward>
     {
     }
 }
+
+public class GetElementListHandlerImdbUsers : GetElementListHandler<ImdbUser>
+{
+    public GetElementListHandlerImdbUsers(IBase<ImdbUser> baseEntity) : base(baseEntity)
+    {
+    }
+}
