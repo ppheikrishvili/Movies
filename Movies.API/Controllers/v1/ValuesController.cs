@@ -18,15 +18,15 @@ namespace Movies.API.Controllers.v1
             _mediator = mediator;
         }
 
-        [HttpGet]
+        [HttpGet("GetUsers")]
         [ResponseCache(CacheProfileName = "Cache2Mins")]
         public async Task<IEnumerable<ImdbUser>?> GetUsers() =>
             await _mediator?.Send(new GetElementListQuery<ImdbUser>(), CancellationToken.None)!;
 
 
-        [HttpGet("{id}")]
+        [HttpGet("GetUserById")]
         [ResponseCache(CacheProfileName = "Cache3Mins")]
-        public async Task<ImdbUser?> Get(string userName)
+        public async Task<ImdbUser?> GetUserById(string userName)
         {
             return (await _mediator?.Send(new GetElementListQuery<ImdbUser>(i => i.Name == userName),
                 CancellationToken.None)!).FirstOrDefault();
