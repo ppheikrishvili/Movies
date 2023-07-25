@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Movies.Domain.Entity;
 using Movies.Domain.Interface;
 using System.Text.Json;
 
@@ -24,19 +23,5 @@ public class GetMovieFromSourceHandler<T> : IRequestHandler<GetMovieFromSourceQu
         var stream = await response.Content.ReadAsStreamAsync(cancellationToken);
         return await JsonSerializer.DeserializeAsync<List<T>>(stream,
             new JsonSerializerOptions {PropertyNameCaseInsensitive = true}, cancellationToken) ?? new List<T>();
-    }
-}
-
-public class GetMovieFromSourceHandlerActor : GetMovieFromSourceHandler<Actor>
-{
-    public GetMovieFromSourceHandlerActor(IHttpClientFactory _iHttpClientFactory) : base(_iHttpClientFactory)
-    {
-    }
-}
-
-public class GetMovieFromSourceHandlerMovie : GetMovieFromSourceHandler<Movie>
-{
-    public GetMovieFromSourceHandlerMovie(IHttpClientFactory _iHttpClientFactory) : base(_iHttpClientFactory)
-    {
     }
 }

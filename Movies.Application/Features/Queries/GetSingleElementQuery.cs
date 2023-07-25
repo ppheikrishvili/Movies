@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Movies.Domain.Entity;
 using Movies.Domain.Interface;
 using System.Linq.Expressions;
 
@@ -16,14 +15,6 @@ namespace Movies.Application.Features.Queries
         {
             return await _baseEntity.FirstOrDefaultAsync(request.condLambda, cancellationToken) ??
                    throw new InvalidOperationException("Element not found");
-        }
-    }
-
-
-    public class GetGetSingleElementHandlermdbUsers : GetSingleElementHandler<ImdbUser>
-    {
-        public GetGetSingleElementHandlermdbUsers(IBase<ImdbUser> baseEntity) : base(baseEntity)
-        {
         }
     }
 }

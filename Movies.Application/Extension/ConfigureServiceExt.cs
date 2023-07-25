@@ -1,11 +1,14 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
+using Movies.Application.Features.Queries;
 using Movies.Application.Validators;
+using Movies.Domain.Entity;
 
 
 namespace Movies.Application.Extension;
@@ -23,9 +26,30 @@ public static class ConfigureServiceExt
     }
 
 
-    public static void AddMedialRExt(this IServiceCollection serviceCollection) =>
+    public static void AddMedialRExt(this IServiceCollection serviceCollection)
+    {
         serviceCollection.AddMediatR(cfg =>
             cfg.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies()));
+
+        serviceCollection
+            .AddTransient<IRequestHandler<GetElementListQuery<ImdbUser>, List<ImdbUser>>,
+                GetElementListHandler<ImdbUser>>();
+        serviceCollection
+            .AddTransient<IRequestHandler<GetElementListQuery<Actor>, List<Actor>>, GetElementListHandler<Actor>>();
+        serviceCollection
+            .AddTransient<IRequestHandler<GetElementListQuery<Movie>, List<Movie>>, GetElementListHandler<Movie>>();
+        serviceCollection.AddTransient<IRequestHandler<GetElementListQuery<ActorAward>, List<ActorAward>>,
+            GetElementListHandler<ActorAward>>();
+
+        serviceCollection.AddTransient<IRequestHandler<GetSingleElementQuery<ActorAward>, ActorAward>,
+            GetSingleElementHandler<ActorAward>>();
+        serviceCollection.AddTransient<IRequestHandler<GetSingleElementQuery<ImdbUser>, ImdbUser>,
+            GetSingleElementHandler<ImdbUser>>();
+        serviceCollection.AddTransient<IRequestHandler<GetSingleElementQuery<Actor>, Actor>,
+            GetSingleElementHandler<Actor>>();
+        serviceCollection.AddTransient<IRequestHandler<GetSingleElementQuery<Movie>, Movie>,
+            GetSingleElementHandler<Movie>>();
+    }
 
     public static void AddVersion(this IServiceCollection services)
     {
