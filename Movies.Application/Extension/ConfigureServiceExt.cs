@@ -41,13 +41,14 @@ public static class ConfigureServiceExt
         serviceCollection.AddTransient<IRequestHandler<GetElementListQuery<ActorAward>, List<ActorAward>>,
             GetElementListHandler<ActorAward>>();
 
-        serviceCollection.AddTransient<IRequestHandler<GetSingleElementQuery<ActorAward>, ActorAward>,
+
+        serviceCollection.AddTransient<IRequestHandler<GetSingleElementQuery<ActorAward>, ResponseResult<ActorAward>>,
             GetSingleElementHandler<ActorAward>>();
-        serviceCollection.AddTransient<IRequestHandler<GetSingleElementQuery<ImdbUser>, ImdbUser>,
+        serviceCollection.AddTransient<IRequestHandler<GetSingleElementQuery<ImdbUser>, ResponseResult<ImdbUser>>,
             GetSingleElementHandler<ImdbUser>>();
-        serviceCollection.AddTransient<IRequestHandler<GetSingleElementQuery<Actor>, Actor>,
+        serviceCollection.AddTransient<IRequestHandler<GetSingleElementQuery<Actor>, ResponseResult<Actor>>,
             GetSingleElementHandler<Actor>>();
-        serviceCollection.AddTransient<IRequestHandler<GetSingleElementQuery<Movie>, Movie>,
+        serviceCollection.AddTransient<IRequestHandler<GetSingleElementQuery<Movie>, ResponseResult<Movie>>,
             GetSingleElementHandler<Movie>>();
     }
 
