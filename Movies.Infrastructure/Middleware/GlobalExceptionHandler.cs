@@ -11,10 +11,8 @@ public class GlobalExceptionHandler : IMiddleware
 {
     private readonly ILogger<GlobalExceptionHandler>? _logger;
 
-    public GlobalExceptionHandler(ILogger<GlobalExceptionHandler>? logger)
-    {
-        _logger = logger;
-    }
+    public GlobalExceptionHandler(ILogger<GlobalExceptionHandler>? logger) => _logger = logger;
+
 
     private async Task HandleExceptionAsync(HttpContext context, Exception ex)
     {
@@ -40,7 +38,7 @@ public class GlobalExceptionHandler : IMiddleware
             await next(context);
             _logger?.Log(LogLevel.Information,
                 $"Requested - {requestStr} {Environment.NewLine} Response - {await FormatResponse(context.Response)}");
-            await responseBody.CopyToAsync(originalBodyStream);
+            await responseBody.CopyToAsync(originalBodyStream).ConfigureAwait(false);
         }
         catch (Exception exceptionObj)
         {
@@ -52,7 +50,7 @@ public class GlobalExceptionHandler : IMiddleware
     private async Task<string> FormatResponse(HttpResponse response)
     {
         response.Body.Seek(0, SeekOrigin.Begin);
-        string text = await new StreamReader(response.Body).ReadToEndAsync();
+        string text = await new StreamReader(response.Body).ReadToEndAsync().ConfigureAwait(false);
         response.Body.Seek(0, SeekOrigin.Begin);
         return $"{response.StatusCode}: {text}";
     }
@@ -63,7 +61,7 @@ public class GlobalExceptionHandler : IMiddleware
         var body = request.Body;
         request.EnableBuffering();
         var buffer = new byte[Convert.ToInt32(request.ContentLength)];
-        int _ = await request.Body.ReadAsync(buffer, 0, buffer.Length);
+        int _ = await request.Body.ReadAsync(buffer, 0, buffer.Length).ConfigureAwait(false);
         var bodyAsText = Encoding.UTF8.GetString(buffer);
         request.Body = body;
         return $"{request.Scheme} {request.Host}{request.Path} {request.QueryString} {bodyAsText}";
