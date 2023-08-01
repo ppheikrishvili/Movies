@@ -18,7 +18,7 @@ public sealed class AppDBContext : DbContext
         ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
     }
 
-    public DbSet<ImdbUser> ImdbUsers { get; set; }
+    //public DbSet<ImdbUser> ImdbUsers { get; set; }
 
     public AppDBContext(DbContextOptions options) : base(options)
     {
@@ -32,7 +32,7 @@ public sealed class AppDBContext : DbContext
 
         ApplyEntityMapsFromAssembly().ForEach(t => Activator.CreateInstance(t, modelBuilder));
 
-        var _seedData = this.Database.GetService<ITestSeedsService>();
+        var _seedData = Database.GetService<ITestSeedsService>();
         if (_seedData != null)
         {
             var seedImdbUsers = _seedData.GetImdbUsers(10);

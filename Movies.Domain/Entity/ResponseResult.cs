@@ -17,13 +17,9 @@ public class ResponseResult<T> : IResponseResult<T>
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public bool IsServiceError
     {
-        get
-        {
-            if (string.IsNullOrWhiteSpace(ResponseStr)) return false;
-            if ((ResponseCode != ResponseCodeEnum.Notification) && (ResponseCode != ResponseCodeEnum.Success))
-                return true;
-            return false;
-        }
+        get =>
+            !string.IsNullOrWhiteSpace(ResponseStr) && (ResponseCode != ResponseCodeEnum.Notification) &&
+            (ResponseCode != ResponseCodeEnum.Success);
         set { }
     }
 
@@ -38,8 +34,8 @@ public class ResponseResult<T> : IResponseResult<T>
     public ResponseResult() => (ResponseStr, ReturnValue) = ("", default!);
 
     public static ResponseResult<ICollection<TT>> ErrorResponseResultList<TT>(string eStr, ResponseCodeEnum respCode) =>
-        new ResponseResult<ICollection<TT>>(eStr, respCode, Activator.CreateInstance<List<TT>>());
+        new(eStr, respCode, Activator.CreateInstance<List<TT>>());
 
     public static ResponseResult<TT> ErrorResponseResultValue<TT>(string eStr, ResponseCodeEnum respCode) =>
-        new ResponseResult<TT>(eStr, respCode, Activator.CreateInstance<TT>());
+        new(eStr, respCode, Activator.CreateInstance<TT>());
 }

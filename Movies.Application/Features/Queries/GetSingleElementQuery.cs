@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 
 namespace Movies.Application.Features.Queries
 {
-    public record GetSingleElementQuery<T>(Expression<Func<T, bool>>? condLambda) : IRequest<ResponseResult<T>>;
+    public record GetSingleElementQuery<T>(Expression<Func<T, bool>>? CondLambda) : IRequest<ResponseResult<T>>;
 
     public class GetSingleElementHandler<T> : IRequestHandler<GetSingleElementQuery<T>, ResponseResult<T>>
         where T : class, IEntity
@@ -16,7 +16,7 @@ namespace Movies.Application.Features.Queries
         public async Task<ResponseResult<T>> Handle(GetSingleElementQuery<T> request,
             CancellationToken cancellationToken)
         {
-            return new ResponseResult<T>(await _baseEntity.FirstOrDefaultAsync(request.condLambda, cancellationToken) ??
+            return new ResponseResult<T>(await _baseEntity.FirstOrDefaultAsync(request.CondLambda, cancellationToken) ??
                                          throw new InvalidOperationException("Element not found"));
         }
     }

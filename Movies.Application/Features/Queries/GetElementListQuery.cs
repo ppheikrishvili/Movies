@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 
 namespace Movies.Application.Features.Queries;
 
-public record GetElementListQuery<T>(Expression<Func<T, bool>>? condLambda = null) : IRequest<List<T>>;
+public record GetElementListQuery<T>(Expression<Func<T, bool>>? CondLambda = null) : IRequest<List<T>>;
 
 public class GetElementListHandler<T> : IRequestHandler<GetElementListQuery<T>, List<T>> where T : class, IEntity
 {
@@ -13,6 +13,6 @@ public class GetElementListHandler<T> : IRequestHandler<GetElementListQuery<T>, 
 
     public async Task<List<T>> Handle(GetElementListQuery<T> request, CancellationToken cancellationToken)
     {
-        return await _baseEntity.GetListAsync(request.condLambda, cancellationToken);
+        return await _baseEntity.GetListAsync(request.CondLambda, cancellationToken);
     }
 }

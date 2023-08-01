@@ -7,11 +7,11 @@ public class Movie : Entity
 {
     [MaxLength(150)]
     [JsonPropertyName("title")]
-    public string title { get; set; }
+    public required string Title { get; set; }
 
     [MaxLength(250)]
     [JsonPropertyName("description")]
-    public string? description { get; set; }
+    public string? Description { get; set; }
 
     [MaxLength(32)]
     //public string? ActorId { get; set; }

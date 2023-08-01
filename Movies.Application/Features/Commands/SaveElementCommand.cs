@@ -5,7 +5,7 @@ using Movies.Domain.Shared.Enums;
 
 namespace Movies.Application.Features.Commands;
 
-public record SaveElementCommand<T>(T element, InsertUpdateEnum insertOrUpdate) : IRequest<bool>;
+public record SaveElementCommand<T>(T Element, InsertUpdateEnum InsertOrUpdate) : IRequest<bool>;
 
 public class SaveElementCommandHandler<T> : IRequestHandler<SaveElementCommand<T>, bool> where T : class, IEntity
 {
@@ -14,13 +14,6 @@ public class SaveElementCommandHandler<T> : IRequestHandler<SaveElementCommand<T
 
     public async Task<bool> Handle(SaveElementCommand<T> request, CancellationToken cancellationToken)
     {
-        return await _baseEntity.Save(request.element, request.insertOrUpdate);
-    }
-}
-
-public class SaveElementCommandActor : SaveElementCommandHandler<Actor>
-{
-    public SaveElementCommandActor(IBase<Actor> baseEntity) : base(baseEntity)
-    {
+        return await _baseEntity.Save(request.Element, request.InsertOrUpdate);
     }
 }
