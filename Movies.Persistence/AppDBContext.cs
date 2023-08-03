@@ -18,8 +18,6 @@ public sealed class AppDBContext : DbContext
         ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
     }
 
-    //public DbSet<ImdbUser> ImdbUsers { get; set; }
-
     public AppDBContext(DbContextOptions options) : base(options)
     {
         //ChangeTracker.LazyLoadingEnabled = false;
