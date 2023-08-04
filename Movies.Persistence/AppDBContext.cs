@@ -14,13 +14,13 @@ public sealed class AppDBContext : DbContext
 
     public AppDBContext()
     {
-        ChangeTracker.LazyLoadingEnabled = false;
+        if (!Database.IsInMemory()) ChangeTracker.LazyLoadingEnabled = false;
         ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
     }
 
     public AppDBContext(DbContextOptions options) : base(options)
     {
-        //ChangeTracker.LazyLoadingEnabled = false;
+        if (!Database.IsInMemory()) ChangeTracker.LazyLoadingEnabled = false;
         ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
     }
 

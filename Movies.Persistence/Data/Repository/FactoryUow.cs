@@ -15,14 +15,8 @@ public class FactoryUow : IFactoryUow, IAsyncDisposable
     public FactoryUow(AppDBContext appContext)
     {
         AppContext = appContext;
-        AppContext.Database.SetCommandTimeout(160);
+        if (!AppContext.Database.IsInMemory()) AppContext.Database.SetCommandTimeout(160);
     }
-
-    //public FactoryUow()
-    //{
-    //    AppContext = new AppDBContext();
-    //    AppContext.Database.SetCommandTimeout(160);
-    //}
 
     private static Type? GetSubClassType(Type baseT) => Assembly.GetAssembly(baseT)?.GetTypes().FirstOrDefault(t =>
         t.IsSubclassOf(baseT) && t is {IsAbstract: false, IsClass: true});

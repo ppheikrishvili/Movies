@@ -2,8 +2,6 @@ using System.Text.Json.Serialization;
 using MediatR;
 using Movies.Application.Behaviors;
 using Movies.Application.Extension;
-using Movies.Application.Features.Queries;
-using Movies.Domain.Entity;
 using Movies.Domain.Interface;
 using Movies.Infrastructure.Middleware;
 using Movies.Persistence.Common.Extension;
@@ -39,6 +37,7 @@ builder.Services.AddDbContext(builder.Configuration);
 
 builder.Services.AddTransient(typeof(IBase<>), typeof(Base<>));
 
+builder.Services.AddTransient(typeof(IFactoryUow), typeof(FactoryUow));
 
 builder.Services.AddControllersWithViews().AddJsonOptions(opt =>
 {

@@ -10,11 +10,11 @@ public class Base<T> : IBase<T> where T : class, IEntity
     public DbSet<T> DbSetEntity { get; set; }
     public AppDBContext AppContext { get; set; }
 
-    public Base()
-    {
-        AppContext = new AppDBContext();
-        DbSetEntity = AppContext.Set<T>();
-    }
+    //public Base()
+    //{
+    //    AppContext = new AppDBContext();
+    //    DbSetEntity = AppContext.Set<T>();
+    //}
 
     public Base(AppDBContext context) => (AppContext, DbSetEntity) = (context, context.Set<T>());
 

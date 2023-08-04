@@ -22,8 +22,8 @@ public class GlobalExceptionHandler : IMiddleware
         context.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
         await context.Response.WriteAsync(JsonConvert.SerializeObject(new
         {
-            StatusCode = HttpStatusCode.InternalServerError,
-            Message = errorMessage
+            ResponseCode = HttpStatusCode.InternalServerError,
+            ResponseStr = errorMessage
         })).ConfigureAwait(false);
     }
 
