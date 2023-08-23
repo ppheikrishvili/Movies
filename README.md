@@ -1,7 +1,8 @@
-* use MediatR for CQRS pattern
-* use FluentValidation to validate requests
-* use EF Core, Code-First Approach, Automatic Code First Migrations and Fluent API
-* Response Caching
-* use MS SQL database
-* use Swagger
-* use Github for source control
+* used MediatR for CQRS pattern
+* used FluentValidation to validate requests
+* used EF Core, Code-First Approach, Automatic Code First Migrations and Fluent API
+* used Response Caching
+* used ApiVersioning
+* used MS SQL database
+* used Swagger
+* used Github for source control
