@@ -29,6 +29,24 @@ public class GlobalExceptionHandler : IMiddleware
 
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
+        //Stream originalBodyStream = context.Response.Body;
+        //try
+        //{
+        //    string requestStr = await FormatRequest(context.Request);
+        //    using var responseBody = new MemoryStream();
+        //    context.Response.Body = responseBody;
+        //    await next(context);
+        //    _logger?.Log(LogLevel.Information,
+        //        $"Requested - {requestStr} {Environment.NewLine} Response - {await FormatResponse(context.Response)}");
+        //    await responseBody.CopyToAsync(originalBodyStream).ConfigureAwait(false);
+        //}
+        //catch (Exception exceptionObj)
+        //{
+        //    context.Response.Body = originalBodyStream;
+        //    await HandleExceptionAsync(context, exceptionObj).ConfigureAwait(false);
+        //}
+
+
         Stream originalBodyStream = context.Response.Body;
         try
         {
@@ -61,8 +79,10 @@ public class GlobalExceptionHandler : IMiddleware
         var body = request.Body;
         request.EnableBuffering();
         var buffer = new byte[Convert.ToInt32(request.ContentLength)];
+        //String bodyAsText = await new StreamReader(request.Body).ReadToEndAsync().ConfigureAwait(false);
         int _ = await request.Body.ReadAsync(buffer, 0, buffer.Length).ConfigureAwait(false);
         var bodyAsText = Encoding.UTF8.GetString(buffer);
+        //request.Body.Position = 0;
         request.Body = body;
         return $"{request.Scheme} {request.Host}{request.Path} {request.QueryString} {bodyAsText}";
     }

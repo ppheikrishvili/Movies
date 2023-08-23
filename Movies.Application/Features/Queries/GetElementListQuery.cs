@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Movies.Domain.Entity;
 using Movies.Domain.Interface;
 using System.Linq.Expressions;
 
@@ -17,13 +18,15 @@ namespace Movies.Application.Features.Queries;
 //    }
 //}
 
-public record GetElementListQuery<T>(Expression<Func<T, bool>>? CondLambda = null) : IRequest<List<T>>;
+public record GetElementListQuery<T>(Expression<Func<T, bool>>? CondLambda = null) : IRequest<ResponseResult<List<T>>>;
 
-public class GetElementListHandler<T> : IRequestHandler<GetElementListQuery<T>, List<T>> where T : class, IEntity
+public class GetElementListHandler<T> : IRequestHandler<GetElementListQuery<T>, ResponseResult<List<T>>>
+    where T : class, IEntity
 {
     private readonly IFactoryUow _factoryUow;
     public GetElementListHandler(IFactoryUow baseEntity) => _factoryUow = baseEntity;
 
-    public async Task<List<T>> Handle(GetElementListQuery<T> request, CancellationToken cancellationToken)
-        => await _factoryUow.Repository<T>().GetListAsync(request.CondLambda, cancellationToken);
+    public async Task<ResponseResult<List<T>>> Handle(GetElementListQuery<T> request,
+        CancellationToken cancellationToken)
+        => new(await _factoryUow.Repository<T>().GetListAsync(request.CondLambda, cancellationToken));
 }

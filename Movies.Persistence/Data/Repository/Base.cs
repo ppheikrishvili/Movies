@@ -27,9 +27,11 @@ public class Base<T> : IBase<T> where T : class, IEntity
         CancellationToken token = default)
     {
         if (condLambda != null)
-            return await DbSetEntity.AsNoTracking().Where(condLambda).ToListAsync(cancellationToken: token)
+            await EF.CompileAsyncQuery((AppDBContext ctx, Expression<Func<T, bool>>? _condLambda) =>
+                    ctx.Set<T>().AsNoTracking().Where(condLambda).ToList())(AppContext, condLambda)
                 .ConfigureAwait(false);
-        return await DbSetEntity.AsNoTracking().ToListAsync(cancellationToken: token).ConfigureAwait(false);
+        return await EF.CompileAsyncQuery((AppDBContext ctx) => ctx.Set<T>().AsNoTracking().ToList())(AppContext)
+            .ConfigureAwait(false);
     }
 
     public async Task<T?> FirstOrDefaultAsync(Expression<Func<T, bool>>? condLambda = null,

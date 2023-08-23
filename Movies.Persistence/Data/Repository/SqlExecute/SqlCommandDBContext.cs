@@ -25,6 +25,7 @@ public class SqlCommandDBContext : ISqlCommandDbContext
         await using DbDataReader reader =
             await command.ExecuteReaderAsync(CommandBehavior.CloseConnection, cancellationToken);
         DataTable table = new();
+        // ReSharper disable once AccessToDisposedClosure
         await Task.WhenAll(Task.Run(() => { table.Load(reader); }, cancellationToken)).ConfigureAwait(false);
         return table;
     }
@@ -35,7 +36,7 @@ public class SqlCommandDBContext : ISqlCommandDbContext
         await using DbConnection connection = AppContext.Database.GetDbConnection();
         if (connection.State.Equals(ConnectionState.Closed)) await connection.OpenAsync(cancellationToken);
         await using DbCommand command = connection.CreateCommand();
-        command.CommandTimeout = 3200;
+        command.CommandTimeout = 120;
         command.CommandText = sqlCommandText;
         return await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
     }

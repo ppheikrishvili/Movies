@@ -15,11 +15,11 @@ public class FactoryUow : IFactoryUow, IAsyncDisposable
     public FactoryUow(AppDBContext appContext)
     {
         AppContext = appContext;
-        if (!AppContext.Database.IsInMemory()) AppContext.Database.SetCommandTimeout(160);
+        //if (!AppContext.Database.IsInMemory()) AppContext.Database.SetCommandTimeout(160);
     }
 
-    private static Type? GetSubClassType(Type baseT) => Assembly.GetAssembly(baseT)?.GetTypes().FirstOrDefault(t =>
-        t.IsSubclassOf(baseT) && t is {IsAbstract: false, IsClass: true});
+    private static Type? GetSubClassType(Type baseT) => Assembly.GetCallingAssembly()?.GetTypes().FirstOrDefault(t =>
+        baseT.IsAssignableFrom(t) && t is {IsAbstract: false, IsInterface: false});
 
     public async Task<int> CommitAsync(CancellationToken token = default) =>
         await AppContext.SaveChangesAsync(token).ConfigureAwait(false);
@@ -34,7 +34,7 @@ public class FactoryUow : IFactoryUow, IAsyncDisposable
 
     private static IBase<T> Repository<T>(AppDBContext contextDb) where T : class, IEntity
     {
-        Type? repositoryType = GetSubClassType(typeof(Base<T>));
+        Type? repositoryType = GetSubClassType(typeof(IBase<T>));
         if (repositoryType == null) return ((IBase<T>) Activator.CreateInstance(typeof(Base<T>), contextDb)!);
         return (IBase<T>) Activator.CreateInstance(repositoryType, contextDb)!;
     }

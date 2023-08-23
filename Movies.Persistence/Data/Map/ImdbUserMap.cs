@@ -11,7 +11,7 @@ public class ImdbUserMap : IBaseMapModel
     {
         EntityTypeBuilder<ImdbUser> entityBuilder = mBuilder.Entity<ImdbUser>();
         entityBuilder.HasKey(x => x.Name);
-        entityBuilder.Property(x => x.Name).HasMaxLength(32).IsRequired().IsUnicode();
-        entityBuilder.Property(x => x.Password).HasMaxLength(126).IsRequired().IsUnicode();
+        //entityBuilder.Property(x => x.Name).HasMaxLength(32).IsRequired().IsUnicode();
+        //entityBuilder.Property(x => x.Password).HasMaxLength(126).IsRequired().IsUnicode();
     }
 }

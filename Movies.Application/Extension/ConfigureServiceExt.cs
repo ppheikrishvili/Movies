@@ -32,15 +32,17 @@ public static class ConfigureServiceExt
             cfg.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies()));
 
         serviceCollection
-            .AddTransient<IRequestHandler<GetElementListQuery<ImdbUser>, List<ImdbUser>>,
+            .AddTransient<IRequestHandler<GetElementListQuery<ImdbUser>, ResponseResult<List<ImdbUser>>>,
                 GetElementListHandler<ImdbUser>>();
         serviceCollection
-            .AddTransient<IRequestHandler<GetElementListQuery<Actor>, List<Actor>>, GetElementListHandler<Actor>>();
+            .AddTransient<IRequestHandler<GetElementListQuery<Actor>, ResponseResult<List<Actor>>>,
+                GetElementListHandler<Actor>>();
         serviceCollection
-            .AddTransient<IRequestHandler<GetElementListQuery<Movie>, List<Movie>>, GetElementListHandler<Movie>>();
-        serviceCollection.AddTransient<IRequestHandler<GetElementListQuery<ActorAward>, List<ActorAward>>,
-            GetElementListHandler<ActorAward>>();
-
+            .AddTransient<IRequestHandler<GetElementListQuery<Movie>, ResponseResult<List<Movie>>>,
+                GetElementListHandler<Movie>>();
+        serviceCollection
+            .AddTransient<IRequestHandler<GetElementListQuery<ActorAward>, ResponseResult<List<ActorAward>>>,
+                GetElementListHandler<ActorAward>>();
 
         serviceCollection.AddTransient<IRequestHandler<GetSingleElementQuery<ActorAward>, ResponseResult<ActorAward>>,
             GetSingleElementHandler<ActorAward>>();
@@ -62,7 +64,6 @@ public static class ConfigureServiceExt
         });
     }
 
-
     public static void AddVersionedApi(this IServiceCollection services)
     {
         services.AddVersionedApiExplorer(o =>
@@ -71,7 +72,6 @@ public static class ConfigureServiceExt
             o.SubstituteApiVersionInUrl = true;
         });
     }
-
 
     public static void AddSwagger(this IServiceCollection services)
     {

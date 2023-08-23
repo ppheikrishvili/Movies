@@ -24,14 +24,14 @@ public class ResponseResult<T> : IResponseResult<T>
     }
 
     public ResponseResult(T rValue) =>
-        (ReturnValue, ResponseStr, ResponseCode) = (rValue, "", ResponseCodeEnum.Success);
+        (ReturnValue, ResponseStr, ResponseCode) = (rValue, null, ResponseCodeEnum.Success);
 
     public ResponseResult(string? eStr, T rValue) => (ReturnValue, ResponseStr) = (rValue, eStr);
 
     public ResponseResult(string? eStr, ResponseCodeEnum respCode, T rValue) =>
         (ReturnValue, ResponseStr, ResponseCode) = (rValue, eStr, respCode);
 
-    public ResponseResult() => (ResponseStr, ReturnValue) = ("", default!);
+    public ResponseResult() => (ResponseStr, ReturnValue) = (null, default!);
 
     public static ResponseResult<ICollection<TT>> ErrorResponseResultList<TT>(string eStr, ResponseCodeEnum respCode) =>
         new(eStr, respCode, Activator.CreateInstance<List<TT>>());
