@@ -7,6 +7,10 @@ namespace Movies.API.Controllers.Base;
 [Route("api/v{version:apiVersion}/[controller]")]
 public abstract class BaseController : ControllerBase
 {
-    internal IMediator? _mediator;
-    protected IMediator Mediator => _mediator ??= HttpContext.RequestServices.GetService<IMediator>()!;
+    private IMediator? _mediator;
+    public IMediator Mediator
+    {
+        get => _mediator ??= HttpContext.RequestServices.GetService<IMediator>()!;
+        set => _mediator = value;
+    }
 }

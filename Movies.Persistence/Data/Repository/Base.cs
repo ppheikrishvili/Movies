@@ -27,7 +27,7 @@ public class Base<T> : IBase<T> where T : class, IEntity
         CancellationToken token = default)
     {
         if (condLambda != null)
-            await EF.CompileAsyncQuery((AppDBContext ctx, Expression<Func<T, bool>>? _condLambda) =>
+            await EF.CompileAsyncQuery((AppDBContext ctx, Expression<Func<T, bool>>? expression) =>
                     ctx.Set<T>().AsNoTracking().Where(condLambda).ToList())(AppContext, condLambda)
                 .ConfigureAwait(false);
         return await EF.CompileAsyncQuery((AppDBContext ctx) => ctx.Set<T>().AsNoTracking().ToList())(AppContext)
