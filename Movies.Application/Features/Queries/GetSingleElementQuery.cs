@@ -5,23 +5,6 @@ using System.Linq.Expressions;
 
 namespace Movies.Application.Features.Queries
 {
-    //public record GetSingleElementQuery<T>(Expression<Func<T, bool>>? CondLambda) : IRequest<ResponseResult<T>>;
-
-    //public class GetSingleElementHandler<T> : IRequestHandler<GetSingleElementQuery<T>, ResponseResult<T>>
-    //    where T : class, IEntity
-    //{
-    //    private readonly IBase<T> _baseEntity;
-    //    public GetSingleElementHandler(IBase<T> baseEntity) => _baseEntity = baseEntity;
-
-    //    public async Task<ResponseResult<T>> Handle(GetSingleElementQuery<T> request,
-    //        CancellationToken cancellationToken)
-    //    {
-    //        return new ResponseResult<T>(await _baseEntity.FirstOrDefaultAsync(request.CondLambda, cancellationToken) ??
-    //                                     throw new InvalidOperationException("Element not found"));
-    //    }
-    //}
-
-
     public record GetSingleElementQuery<T>(Expression<Func<T, bool>>? CondLambda) : IRequest<ResponseResult<T>>;
 
     public class GetSingleElementHandler<T> : IRequestHandler<GetSingleElementQuery<T>, ResponseResult<T>>
@@ -30,10 +13,9 @@ namespace Movies.Application.Features.Queries
         private readonly IFactoryUow _factoryUow;
         public GetSingleElementHandler(IFactoryUow baseEntity) => _factoryUow = baseEntity;
 
-        public async Task<ResponseResult<T>> Handle(GetSingleElementQuery<T> request,
-            CancellationToken cancellationToken)
+        public async Task<ResponseResult<T>> Handle(GetSingleElementQuery<T> request, CancellationToken cancellationToken)
             => new(
-                await _factoryUow.Repository<T>().FirstOrDefaultAsync(request.CondLambda, cancellationToken) ??
+                await _factoryUow.Repository<T>().FirstOrDefaultAsync(request.CondLambda!, cancellationToken) ??
                 throw new InvalidOperationException("Element not found"));
     }
 }

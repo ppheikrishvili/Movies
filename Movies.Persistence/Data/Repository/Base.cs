@@ -10,12 +10,6 @@ public class Base<T> : IBase<T> where T : class, IEntity
     public DbSet<T> DbSetEntity { get; set; }
     public AppDBContext AppContext { get; set; }
 
-    //public Base()
-    //{
-    //    AppContext = new AppDBContext();
-    //    DbSetEntity = AppContext.Set<T>();
-    //}
-
     public Base(AppDBContext context) => (AppContext, DbSetEntity) = (context, context.Set<T>());
 
     public async Task<int> CountAsync(Expression<Func<T, bool>> condLambda) =>
@@ -23,24 +17,25 @@ public class Base<T> : IBase<T> where T : class, IEntity
 
     public IQueryable<T> DbEntity() => DbSetEntity;
 
-    public async Task<List<T>> GetListAsync(Expression<Func<T, bool>>? condLambda = null,
+    public async Task<List<T>> GetListAsync(Expression<Func<T, bool>>? condLambda,
         CancellationToken token = default)
-    {
-        if (condLambda != null)
-            await EF.CompileAsyncQuery((AppDBContext ctx, Expression<Func<T, bool>>? expression) =>
-                    ctx.Set<T>().AsNoTracking().Where(condLambda).ToList())(AppContext, condLambda)
+        => await EF.CompileAsyncQuery((AppDBContext ctx, Expression<Func<T, bool>>? expression) =>
+                    ctx.Set<T>().AsNoTracking().Where(condLambda!).ToList())(AppContext, condLambda)
                 .ConfigureAwait(false);
-        return await EF.CompileAsyncQuery((AppDBContext ctx) => ctx.Set<T>().AsNoTracking().ToList())(AppContext)
-            .ConfigureAwait(false);
-    }
 
-    public async Task<T?> FirstOrDefaultAsync(Expression<Func<T, bool>>? condLambda = null,
+    public async Task<List<T>> GetListAsync(CancellationToken token = default)
+    => await EF.CompileAsyncQuery((AppDBContext ctx) => ctx.Set<T>().AsNoTracking().ToList())(AppContext)
+            .ConfigureAwait(false);
+    
+    public async Task<T?> FirstOrDefaultAsync(CancellationToken token = default)
+        => await EF.CompileAsyncQuery((AppDBContext ctx) => ctx.Set<T>().AsNoTracking().FirstOrDefault())(AppContext)
+            .ConfigureAwait(false);
+
+    public async Task<T?> FirstOrDefaultAsync(Expression<Func<T, bool>> condLambda,
         CancellationToken token = default)
-    {
-        if (condLambda != null)
-            return await DbSetEntity.AsNoTracking().FirstOrDefaultAsync(condLambda, token).ConfigureAwait(false);
-        return await DbSetEntity.AsNoTracking().FirstOrDefaultAsync(token).ConfigureAwait(false);
-    }
+        => await EF.CompileAsyncQuery((AppDBContext ctx, Expression<Func<T, bool>> expression) =>
+    ctx.Set<T>().AsNoTracking().FirstOrDefault(condLambda))(AppContext, condLambda)
+    .ConfigureAwait(false);
 
     public async Task<T?> ElementByIdAsync(object id) => await DbSetEntity.FindAsync(id).ConfigureAwait(false);
 
