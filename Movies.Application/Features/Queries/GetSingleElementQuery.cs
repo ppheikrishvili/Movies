@@ -15,7 +15,7 @@ namespace Movies.Application.Features.Queries
 
         public async Task<ResponseResult<T>> Handle(GetSingleElementQuery<T> request, CancellationToken cancellationToken)
             => new(
-                await _factoryUow.Repository<T>().FirstOrDefaultAsync(request.CondLambda!, cancellationToken) ??
+                await _factoryUow.Repository<T>().FirstOrDefaultAsync(request.CondLambda ?? ( w => true), cancellationToken) ??
                 throw new InvalidOperationException("Element not found"));
     }
 }
