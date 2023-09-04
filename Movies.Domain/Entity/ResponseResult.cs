@@ -31,6 +31,9 @@ public class ResponseResult<T> : IResponseResult<T>
     public ResponseResult(string? eStr, ResponseCodeEnum respCode, T rValue) =>
         (ReturnValue, ResponseStr, ResponseCode) = (rValue, eStr, respCode);
 
+    public ResponseResult(string? eStr, ResponseCodeEnum respCode ) =>
+        (ReturnValue, ResponseStr, ResponseCode) = (default!, eStr, respCode);
+
     public ResponseResult() => (ResponseStr, ReturnValue) = (null, default!);
 
     public static ResponseResult<ICollection<TT>> ErrorResponseResultList<TT>(string eStr, ResponseCodeEnum respCode) =>
