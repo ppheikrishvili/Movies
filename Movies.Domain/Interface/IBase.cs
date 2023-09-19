@@ -21,14 +21,15 @@ public interface IBase<T> where T : IEntity
 
     Task<bool> AnyAsync(Expression<Func<T, bool>>? condLambda = null);
 
-    Task<bool> Delete(T baseEntity, Func<T, Task<bool>>? validateDelete = null);
+    Task DeleteAsync(T baseEntity, CancellationToken token = default);
 
-    Task<bool> DeleteRange(Expression<Func<T, bool>> condLambda, CancellationToken token = default);
+    Task DeleteAsync(Expression<Func<T, bool>> condLambda, CancellationToken token = default);
 
-    Task<bool> Save(T baseEntity, InsertUpdateEnum isModified = InsertUpdateEnum.Update,
-        Func<T, Task<bool>>? validateDelete = null);
+    Task DeleteAsync(IEnumerable<T> baseEntities, CancellationToken token = default);
 
-    Task<bool> Save(IEnumerable<T> baseEntities, InsertUpdateEnum isModified = InsertUpdateEnum.Update);
+    Task<bool> SaveAsync(T baseEntity, InsertUpdateEnum isModified );
+
+    Task<bool> SaveAsync(IEnumerable<T> baseEntities, InsertUpdateEnum isModified );
 
     void Reload(T refreshItem);
 }

@@ -45,23 +45,25 @@ public class Base<T> : IBase<T> where T : class, IEntity
         return await DbSetEntity.AsNoTracking().AnyAsync().ConfigureAwait(false);
     }
 
-    public Task<bool> Delete(T baseEntity, Func<T, Task<bool>>? validateDelete = null)
+    public Task DeleteAsync(T baseEntity, CancellationToken token = default)
     {
         throw new NotImplementedException();
     }
 
-    public Task<bool> DeleteRange(Expression<Func<T, bool>> condLambda, CancellationToken token = default)
+    public async Task DeleteAsync(Expression<Func<T, bool>> condLambda, CancellationToken token = default) =>
+         await DbSetEntity.Where(condLambda).ExecuteDeleteAsync(token).ConfigureAwait(false);
+
+    public async Task DeleteAsync(IEnumerable<T> baseEntities, CancellationToken token = default)
+    {
+        await Task.Run(() => DbSetEntity.RemoveRange(baseEntities), token).ConfigureAwait(false);
+    }
+
+    public Task<bool> SaveAsync(T baseEntity, InsertUpdateEnum isModified)
     {
         throw new NotImplementedException();
     }
 
-    public Task<bool> Save(T baseEntity, InsertUpdateEnum isModified = InsertUpdateEnum.Update,
-        Func<T, Task<bool>>? validateDelete = null)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<bool> Save(IEnumerable<T> baseEntities, InsertUpdateEnum isModified = InsertUpdateEnum.Update)
+    public Task<bool> SaveAsync(IEnumerable<T> baseEntities, InsertUpdateEnum isModified)
     {
         throw new NotImplementedException();
     }

@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Movies.Domain.Entity;
 using Movies.Domain.Interface;
 using Movies.Domain.Shared.Enums;
 
@@ -14,6 +13,6 @@ public class SaveElementCommandHandler<T> : IRequestHandler<SaveElementCommand<T
 
     public async Task<bool> Handle(SaveElementCommand<T> request, CancellationToken cancellationToken)
     {
-        return await _baseEntity.Save(request.Element, request.InsertOrUpdate);
+        return await _baseEntity.SaveAsync(request.Element, request.InsertOrUpdate);
     }
 }
