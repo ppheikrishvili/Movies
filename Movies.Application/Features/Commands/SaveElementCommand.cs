@@ -13,6 +13,7 @@ public class SaveElementCommandHandler<T> : IRequestHandler<SaveElementCommand<T
 
     public async Task<bool> Handle(SaveElementCommand<T> request, CancellationToken cancellationToken)
     {
-        return await _baseEntity.SaveAsync(request.Element, request.InsertOrUpdate);
+        await _baseEntity.SaveAsync(request.Element, request.InsertOrUpdate, cancellationToken);
+        return true;
     }
 }

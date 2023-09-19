@@ -9,7 +9,7 @@ public interface IBase<T> where T : IEntity
 
     IQueryable<T> DbEntity();
 
-    Task<List<T>> GetListAsync(Expression<Func<T, bool>>? condLambda, CancellationToken token = default);
+    Task<List<T>> GetListAsync(Expression<Func<T, bool>> condLambda, CancellationToken token = default);
 
     Task<List<T>> GetListAsync(CancellationToken token = default);
 
@@ -19,17 +19,19 @@ public interface IBase<T> where T : IEntity
 
     Task<T?> ElementByIdAsync(object id);
 
-    Task<bool> AnyAsync(Expression<Func<T, bool>>? condLambda = null);
+    Task<bool> AnyAsync(Expression<Func<T, bool>> condLambda );
+
+    Task<bool> AnyAsync();
 
     Task DeleteAsync(T baseEntity, CancellationToken token = default);
 
-    Task DeleteAsync(Expression<Func<T, bool>> condLambda, CancellationToken token = default);
+    Task<int> DeleteAsync(Expression<Func<T, bool>> condLambda, CancellationToken token = default);
 
     Task DeleteAsync(IEnumerable<T> baseEntities, CancellationToken token = default);
 
-    Task<bool> SaveAsync(T baseEntity, InsertUpdateEnum isModified );
+    Task SaveAsync(T baseEntity, InsertUpdateEnum isModified, CancellationToken token = default);
 
-    Task<bool> SaveAsync(IEnumerable<T> baseEntities, InsertUpdateEnum isModified );
+    Task SaveAsync(IEnumerable<T> baseEntities, InsertUpdateEnum isModified, CancellationToken token = default);
 
     void Reload(T refreshItem);
 }

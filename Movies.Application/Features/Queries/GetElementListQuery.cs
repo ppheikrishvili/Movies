@@ -2,6 +2,7 @@
 using Movies.Domain.Entity;
 using Movies.Domain.Interface;
 using System.Linq.Expressions;
+using System.Threading;
 
 namespace Movies.Application.Features.Queries;
 
@@ -25,8 +26,8 @@ public class GetElementListHandler<T> : IRequestHandler<GetElementListQuery<T>, 
 {
     private readonly IFactoryUow _factoryUow;
     public GetElementListHandler(IFactoryUow baseEntity) => _factoryUow = baseEntity;
-
-    public async Task<ResponseResult<List<T>>> Handle(GetElementListQuery<T> request,
-        CancellationToken cancellationToken)
-        => new(await _factoryUow.Repository<T>().GetListAsync(request.CondLambda, cancellationToken));
+    public async Task<ResponseResult<List<T>>> Handle(GetElementListQuery<T> request, CancellationToken cancellationToken)
+        => new(
+            request.CondLambda != null ? await _factoryUow.Repository<T>().GetListAsync(request.CondLambda, cancellationToken)
+            : await _factoryUow.Repository<T>().GetListAsync(cancellationToken));
 }
