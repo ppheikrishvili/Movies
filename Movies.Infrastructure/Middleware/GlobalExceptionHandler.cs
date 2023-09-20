@@ -81,6 +81,10 @@ public class GlobalExceptionHandler : IMiddleware
         var buffer = new byte[Convert.ToInt32(request.ContentLength)];
         //String bodyAsText = await new StreamReader(request.Body).ReadToEndAsync().ConfigureAwait(false);
         int _ = await request.Body.ReadAsync(buffer, 0, buffer.Length).ConfigureAwait(false);
+
+        var body1 = request.BodyReader.AsStream(true);
+        using var streamReader = new StreamReader(body1);
+
         var bodyAsText = Encoding.UTF8.GetString(buffer);
         //request.Body.Position = 0;
         request.Body = body;
