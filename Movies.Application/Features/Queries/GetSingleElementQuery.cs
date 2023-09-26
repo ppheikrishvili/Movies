@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Movies.Application.Exceptions;
 using Movies.Domain.Entity;
 using Movies.Domain.Interface;
 using System.Linq.Expressions;
@@ -16,8 +17,8 @@ namespace Movies.Application.Features.Queries
         public async Task<ResponseResult<T>> Handle(GetSingleElementQuery<T> request, CancellationToken cancellationToken)
             => new(
                 await _factoryUow.Repository<T>().FirstOrDefaultAsync(request.CondLambda ?? ( w => true), cancellationToken) ??
-                //throw new InvalidOperationException("Element not found")
-                Activator.CreateInstance<T>()
+                throw new ElementNotFoundException()
+                //Activator.CreateInstance<T>()
                 );
     }
 }
