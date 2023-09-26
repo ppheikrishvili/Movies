@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
+using Movies.Application.Features.Commands;
 using Movies.Application.Features.Queries;
 using Movies.Application.Validators;
 using Movies.Domain.Entity;
@@ -52,6 +53,10 @@ public static class ConfigureServiceExt
             GetSingleElementHandler<Actor>>();
         serviceCollection.AddTransient<IRequestHandler<GetSingleElementQuery<Movie>, ResponseResult<Movie>>,
             GetSingleElementHandler<Movie>>();
+
+        serviceCollection
+            .AddTransient<IRequestHandler<SaveElementCommand<ImdbUser>, ResponseResult<bool>>,
+                SaveElementCommandHandler<ImdbUser>>();
     }
 
     public static void AddVersion(this IServiceCollection services)
@@ -135,7 +140,7 @@ public static class ConfigureServiceExt
     {
         serviceCollection.AddHttpClient("IMDBBaseClient", config =>
         {
-            config.BaseAddress = new Uri(configuration.GetSection("IMDBBaseAddress")?.Value ?? "");
+            config.BaseAddress = new Uri(configuration.GetSection("IMDBBaseAddress").Value ?? "");
             config.Timeout = new TimeSpan(0, 0, 30);
             config.DefaultRequestHeaders.Clear();
         });

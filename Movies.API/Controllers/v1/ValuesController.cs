@@ -1,8 +1,10 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Movies.API.Controllers.Base;
+using Movies.Application.Features.Commands;
 using Movies.Application.Features.Queries;
 using Movies.Domain.Entity;
+using Movies.Domain.Shared.Enums;
 
 namespace Movies.API.Controllers.v1
 {
@@ -23,13 +25,10 @@ namespace Movies.API.Controllers.v1
                 CancellationToken.None));
 
         [HttpPost("AddImdbUser")]
-        public ActionResult<ResponseResult<string>> AddImdbUser(ImdbUser imdbUser)
+        public async Task<ActionResult<ResponseResult<bool>>> AddImdbUser(ImdbUser imdbUser)
         {
-            //return Ok(await _mediator?.Send(new GetSingleElementQuery<ImdbUser>(i => i.Name == userName),
-            //    CancellationToken.None)!);
-            return Ok(new ResponseResult<string>(
-                @"await _mediator?.Send(new GetSingleElementQuery<ImdbUser>(i => i.Name == userName),
-               CancellationToken.None)!"));
+            return Ok(await Mediator.Send(new SaveElementCommand<ImdbUser>(imdbUser, InsertUpdateEnum.Insert),
+                CancellationToken.None));
         }
     }
 }

@@ -18,7 +18,7 @@ public class FactoryUow : IFactoryUow, IAsyncDisposable
         //if (!AppContext.Database.IsInMemory()) AppContext.Database.SetCommandTimeout(160);
     }
 
-    private static Type? GetSubClassType(Type baseT) => Assembly.GetCallingAssembly()?.GetTypes().FirstOrDefault(t =>
+    private static Type? GetSubClassType(Type baseT) => Assembly.GetCallingAssembly().GetTypes().FirstOrDefault(t =>
         baseT.IsAssignableFrom(t) && t is {IsAbstract: false, IsInterface: false});
 
     public async Task<int> CommitAsync(CancellationToken token = default) =>
