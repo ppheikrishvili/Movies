@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Buffers;
+using System.Net;
 using System.Text;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -50,6 +51,7 @@ public class GlobalExceptionHandler : IMiddleware
         Stream originalBodyStream = context.Response.Body;
         try
         {
+            //string requestStr = await FormatRequest(context.Request);
             string requestStr = await FormatRequest(context.Request);
             using var responseBody = new MemoryStream();
             context.Response.Body = responseBody;
@@ -73,21 +75,14 @@ public class GlobalExceptionHandler : IMiddleware
         return $"{response.StatusCode}: {text}";
     }
 
-
     private async Task<string> FormatRequest(HttpRequest request)
     {
-        var body = request.Body;
         request.EnableBuffering();
-        var buffer = new byte[Convert.ToInt32(request.ContentLength)];
-        //String bodyAsText = await new StreamReader(request.Body).ReadToEndAsync().ConfigureAwait(false);
+        byte[] buffer = ArrayPool<byte>.Shared.Rent(Convert.ToInt32(request.ContentLength));
         int _ = await request.Body.ReadAsync(buffer, 0, buffer.Length).ConfigureAwait(false);
-
-        var body1 = request.BodyReader.AsStream(true);
-        using var streamReader = new StreamReader(body1);
-
         var bodyAsText = Encoding.UTF8.GetString(buffer);
-        //request.Body.Position = 0;
-        request.Body = body;
+        ArrayPool<byte>.Shared.Return(buffer);
+        request.Body.Seek(0, SeekOrigin.Begin);
         return $"{request.Scheme} {request.Host}{request.Path} {request.QueryString} {bodyAsText}";
     }
 }
