@@ -9,15 +9,15 @@ public record GetMovieFromSourceQuery<T>(string CondLambda, string FactoryName, 
 public class GetMovieFromSourceHandler<T> : IRequestHandler<GetMovieFromSourceQuery<T>, List<T>>
     where T : class, IEntity
 {
-    private readonly IHttpClientFactory iHttpClientFactory;
+    private readonly IHttpClientFactory _iHttpClientFactory;
 
-    public GetMovieFromSourceHandler(IHttpClientFactory _iHttpClientFactory) =>
-        iHttpClientFactory = _iHttpClientFactory;
+    public GetMovieFromSourceHandler(IHttpClientFactory iHttpClientFactory) =>
+        this._iHttpClientFactory = iHttpClientFactory;
 
     public async Task<List<T>> Handle(GetMovieFromSourceQuery<T> request, CancellationToken cancellationToken)
     {
-        var Client = iHttpClientFactory.CreateClient(request.FactoryName);
-        using var response = await Client
+        var client = _iHttpClientFactory.CreateClient(request.FactoryName);
+        using var response = await client
             .GetAsync(request.RequestStr, HttpCompletionOption.ResponseHeadersRead, cancellationToken)
             .ConfigureAwait(false);
         response.EnsureSuccessStatusCode();

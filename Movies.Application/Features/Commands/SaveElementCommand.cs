@@ -16,7 +16,5 @@ public class SaveElementCommandHandler<T> : IRequestHandler<SaveElementCommand<T
     {
         await _factoryUow.Repository<T>().SaveAsync(request.Element, request.InsertOrUpdate, cancellationToken).ContinueWith( async (_) => await _factoryUow.CommitAsync(cancellationToken), cancellationToken);
         return new ResponseResult<bool>( true);
-        //await _baseEntity.SaveAsync(request.Element, request.InsertOrUpdate, cancellationToken);
-        //return true;
     }
 }

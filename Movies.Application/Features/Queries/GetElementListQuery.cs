@@ -2,7 +2,6 @@
 using Movies.Domain.Entity;
 using Movies.Domain.Interface;
 using System.Linq.Expressions;
-using System.Threading;
 
 namespace Movies.Application.Features.Queries;
 

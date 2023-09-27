@@ -18,7 +18,6 @@ namespace Movies.Application.Features.Queries
             => new(
                 await _factoryUow.Repository<T>().FirstOrDefaultAsync(request.CondLambda ?? ( w => true), cancellationToken) ??
                 throw new ElementNotFoundException()
-                //Activator.CreateInstance<T>()
                 );
     }
 }
