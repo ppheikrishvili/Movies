@@ -54,6 +54,7 @@ public static class ConfigureServiceExt
         serviceCollection.AddTransient<IRequestHandler<GetSingleElementQuery<Movie>, ResponseResult<Movie>>,
             GetSingleElementHandler<Movie>>();
 
+
         serviceCollection
             .AddTransient<IRequestHandler<SaveElementCommand<ImdbUser>, ResponseResult<bool>>,
                 SaveElementCommandHandler<ImdbUser>>();

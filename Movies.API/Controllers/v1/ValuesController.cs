@@ -19,16 +19,13 @@ namespace Movies.API.Controllers.v1
             => Ok(await Mediator.Send(new GetElementListQuery<ImdbUser>(), CancellationToken.None));
 
         [HttpGet("GetUserById")]
-        [ResponseCache(CacheProfileName = "Cache3Mins")]
         public async Task<ActionResult<ResponseResult<ImdbUser>>> GetUserById(string userName)
             => Ok(await Mediator.Send(new GetSingleElementQuery<ImdbUser>(i => i.Name == userName),
                 CancellationToken.None));
 
         [HttpPost("AddImdbUser")]
         public async Task<ActionResult<ResponseResult<bool>>> AddImdbUser(ImdbUser imdbUser)
-        {
-            return Ok(await Mediator.Send(new SaveElementCommand<ImdbUser>(imdbUser, InsertUpdateEnum.Insert),
+            => Ok(await Mediator.Send(new SaveElementCommand<ImdbUser>(imdbUser, InsertUpdateEnum.Insert),
                 CancellationToken.None));
-        }
     }
 }

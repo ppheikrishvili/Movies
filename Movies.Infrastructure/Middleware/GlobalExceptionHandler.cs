@@ -3,6 +3,9 @@ using System.Net;
 using System.Text;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Movies.Application.Exceptions;
+using Movies.Domain.Entity;
+using Movies.Domain.Shared.Enums;
 using Movies.Domain.Shared.Extensions;
 using Newtonsoft.Json;
 
@@ -14,18 +17,24 @@ public class GlobalExceptionHandler : IMiddleware
 
     public GlobalExceptionHandler(ILogger<GlobalExceptionHandler>? logger) => _logger = logger;
 
-
     private async Task HandleExceptionAsync(HttpContext context, Exception ex)
     {
         string errorMessage = await ex.ToErrorStrAsync() ?? "";
         _logger?.LogError($"{nameof(Exception)} details: {errorMessage}");
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
-        await context.Response.WriteAsync(JsonConvert.SerializeObject(new
-        {
-            ResponseCode = HttpStatusCode.InternalServerError,
-            ResponseStr = errorMessage
-        })).ConfigureAwait(false);
+        await context.Response.WriteAsync(JsonConvert.SerializeObject(
+            (ex is BaseException exBaseException)
+                ? exBaseException.ResponseResult
+                : new ResponseResult<Exception>
+                {
+                    ResponseCode = ResponseCodeEnum.InternalSystemError,
+                    ResponseStr = errorMessage
+                }, Formatting.None,
+            new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore
+            })).ConfigureAwait(false);
     }
 
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
