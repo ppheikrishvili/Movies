@@ -24,7 +24,12 @@ public class FactoryUow : IFactoryUow, IAsyncDisposable
     public async Task<int> CommitAsync(CancellationToken token = default) =>
         await AppContext.SaveChangesAsync(token).ConfigureAwait(false);
 
-    async ValueTask IAsyncDisposable.DisposeAsync() => await AppContext.DisposeAsync().ConfigureAwait(false);
+    async ValueTask IAsyncDisposable.DisposeAsync()
+    {
+        await AppContext.DisposeAsync().ConfigureAwait(false);
+        GC.SuppressFinalize(this);
+    }
+
 
     public IBase<T> Repository<T>() where T : class, IEntity
     {

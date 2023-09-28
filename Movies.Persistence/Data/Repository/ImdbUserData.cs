@@ -1,12 +1,19 @@
-﻿using System.Linq.Expressions;
-using Movies.Domain.Entity;
-using Movies.Domain.Interface;
-using Movies.Domain.Shared.Enums;
+﻿using Movies.Domain.Entity;
 
 namespace Movies.Persistence.Data.Repository;
 
-//public class ImdbUserData : IBase<ImdbUser>
-//{
+public class ImdbUserData : Base<ImdbUser>
+{
+    public ImdbUserData(AppDBContext context) : base(context)
+    { }
+
+    public override async Task<List<ImdbUser>> GetListAsync(CancellationToken token = default)
+    {
+        return await base.GetListAsync(token).ConfigureAwait(false);
+    }
+    //public override async Task<List<ImdbUser>> GetListAsync(CancellationToken token = default)
+    //    => await base.GetListAsync(token).ConfigureAwait(false);
+}
 //    public Task<int> CountAsync(Expression<Func<ImdbUser, bool>> condLambda)
 //    {
 //        throw new NotImplementedException();

@@ -24,7 +24,7 @@ public class Base<T> : IBase<T> where T : class, IEntity
     //        ctx.Set<T>().AsNoTracking().Where(condLambda!).ToList())(AppContext, condLambda)
     //    .ConfigureAwait(false);
 
-    public async Task<List<T>> GetListAsync(CancellationToken token = default)
+    public virtual async Task<List<T>> GetListAsync(CancellationToken token = default)
     => await DbSetEntity.AsNoTracking().ToListAsync(cancellationToken: token).ConfigureAwait(false);
     //await EF.CompileAsyncQuery((AppDBContext ctx) => ctx.Set<T>().AsNoTracking().ToList())(AppContext)
     //    .ConfigureAwait(false);

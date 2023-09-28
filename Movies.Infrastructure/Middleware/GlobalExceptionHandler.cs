@@ -20,7 +20,7 @@ public class GlobalExceptionHandler : IMiddleware
     private async Task HandleExceptionAsync(HttpContext context, Exception ex)
     {
         string errorMessage = await ex.ToErrorStrAsync() ?? "";
-        _logger?.LogError($"{nameof(Exception)} details: {errorMessage}");
+        _logger?.LogError("{Exception} details: {errorMessage}", nameof(Exception), errorMessage);
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
         await context.Response.WriteAsync(JsonConvert.SerializeObject(
@@ -47,7 +47,7 @@ public class GlobalExceptionHandler : IMiddleware
             context.Response.Body = responseBody;
             await next(context);
             _logger?.Log(LogLevel.Information,
-                $"Requested - {requestStr} {Environment.NewLine} Response - {await FormatResponse(context.Response)}");
+                "Requested - {requestStr} {NewLine} Response - {FormatResponse}", requestStr, Environment.NewLine, await FormatResponse(context.Response));
             await responseBody.CopyToAsync(originalBodyStream).ConfigureAwait(false);
         }
         catch (Exception exceptionObj)
@@ -57,7 +57,7 @@ public class GlobalExceptionHandler : IMiddleware
         }
     }
 
-    private async Task<string> FormatResponse(HttpResponse response)
+    private static async Task<string> FormatResponse(HttpResponse response)
     {
         response.Body.Seek(0, SeekOrigin.Begin);
         string text = await new StreamReader(response.Body).ReadToEndAsync().ConfigureAwait(false);
@@ -65,11 +65,11 @@ public class GlobalExceptionHandler : IMiddleware
         return $"{response.StatusCode}: {text}";
     }
 
-    private async Task<string> FormatRequest(HttpRequest request)
+    private static async Task<string> FormatRequest(HttpRequest request)
     {
         request.EnableBuffering();
         byte[] buffer = ArrayPool<byte>.Shared.Rent(Convert.ToInt32(request.ContentLength));
-        int _ = await request.Body.ReadAsync(buffer, 0, buffer.Length).ConfigureAwait(false);
+        int _ = await request.Body.ReadAsync(buffer.AsMemory(0, buffer.Length)).ConfigureAwait(false);
         var bodyAsText = Encoding.UTF8.GetString(buffer);
         ArrayPool<byte>.Shared.Return(buffer);
         request.Body.Seek(0, SeekOrigin.Begin);
