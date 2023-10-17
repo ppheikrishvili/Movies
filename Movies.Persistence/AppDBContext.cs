@@ -6,19 +6,19 @@ using Movies.Domain.Entity;
 
 namespace Movies.Persistence;
 
-public sealed class AppDBContext : DbContext
+public sealed class AppDbContext : DbContext
 {
     internal static List<Type> ApplyEntityMapsFromAssembly() => Assembly.GetCallingAssembly().GetTypes()
         .Where(w => typeof(IBaseMapModel).IsAssignableFrom(w) &&
                     w.IsClass && w is {BaseType: not null, IsInterface: false, IsAbstract: false}).ToList();
 
-    public AppDBContext()
+    public AppDbContext()
     {
         if (!Database.IsInMemory()) ChangeTracker.LazyLoadingEnabled = false;
         ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
     }
 
-    public AppDBContext(DbContextOptions options) : base(options)
+    public AppDbContext(DbContextOptions options) : base(options)
     {
         if (!Database.IsInMemory()) ChangeTracker.LazyLoadingEnabled = false;
         ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
@@ -30,11 +30,10 @@ public sealed class AppDBContext : DbContext
 
         ApplyEntityMapsFromAssembly().ForEach(t => Activator.CreateInstance(t, modelBuilder));
 
-        var _seedData = Database.GetService<ITestSeedsService>();
-        if (_seedData != null)
-        {
-            var seedImdbUsers = _seedData.GetImdbUsers(10);
-            modelBuilder.Entity<ImdbUser>().HasData(seedImdbUsers);
-        }
+        var seedData = Database.GetService<ITestSeedsService>();
+        var seedImdbUsers = seedData.GetImdbUsers(10);
+        var seedImdbActors = seedData.GetImdbActors(10);
+        modelBuilder.Entity<ImdbUser>().HasData(seedImdbUsers);
+        modelBuilder.Entity<Actor>().HasData(seedImdbActors);
     }
 }

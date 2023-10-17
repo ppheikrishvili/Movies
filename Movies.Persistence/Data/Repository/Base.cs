@@ -8,9 +8,9 @@ namespace Movies.Persistence.Data.Repository;
 public class Base<T> : IBase<T> where T : class, IEntity
 {
     public DbSet<T> DbSetEntity { get; set; }
-    public AppDBContext AppContext { get; set; }
+    public AppDbContext AppContext { get; set; }
 
-    public Base(AppDBContext context) => (AppContext, DbSetEntity) = (context, context.Set<T>());
+    public Base(AppDbContext context) => (AppContext, DbSetEntity) = (context, context.Set<T>());
 
     public async Task<int> CountAsync(Expression<Func<T, bool>> condLambda) =>
         await DbSetEntity.AsNoTracking().CountAsync(condLambda).ConfigureAwait(false);
@@ -30,12 +30,12 @@ public class Base<T> : IBase<T> where T : class, IEntity
     //    .ConfigureAwait(false);
 
     public async Task<T?> FirstOrDefaultAsync(CancellationToken token = default)
-        => await EF.CompileAsyncQuery((AppDBContext ctx) => ctx.Set<T>().AsNoTracking().FirstOrDefault())(AppContext)
+        => await EF.CompileAsyncQuery((AppDbContext ctx) => ctx.Set<T>().AsNoTracking().FirstOrDefault())(AppContext)
             .ConfigureAwait(false);
 
     public async Task<T?> FirstOrDefaultAsync(Expression<Func<T, bool>> condLambda,
         CancellationToken token = default)
-        => await EF.CompileAsyncQuery((AppDBContext ctx, Expression<Func<T, bool>> expression) =>
+        => await EF.CompileAsyncQuery((AppDbContext ctx, Expression<Func<T, bool>> expression) =>
     ctx.Set<T>().AsNoTracking().FirstOrDefault(condLambda))(AppContext, condLambda)
     .ConfigureAwait(false);
 

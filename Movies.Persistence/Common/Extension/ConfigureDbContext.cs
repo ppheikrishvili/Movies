@@ -13,22 +13,22 @@ public static class ConfigureDbContext
     {
         if (configuration.GetValue<bool>("IsInMemoryDatabase"))
         {
-            serviceCollection.AddDbContext<AppDBContext>(options =>
+            serviceCollection.AddDbContext<AppDbContext>(options =>
                 options.UseInMemoryDatabase("MovieIMDB"));
             serviceCollection.AddTransient<ITestSeedsService, TestSeedsService>();
 
             using ServiceProvider serviceProvider = serviceCollection.BuildServiceProvider();
-            var context = serviceProvider.GetRequiredService<AppDBContext>();
+            var context = serviceProvider.GetRequiredService<AppDbContext>();
             context.Database.EnsureCreated();
         }
         else
         {
-            serviceCollection.AddDbContext<AppDBContext>(options =>
+            serviceCollection.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("ConnectionString"),
-                    b => b.MigrationsAssembly(typeof(AppDBContext).Assembly.FullName)));
+                    b => b.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName)));
 
             using ServiceProvider serviceProvider = serviceCollection.BuildServiceProvider();
-            var context = serviceProvider.GetRequiredService<AppDBContext>();
+            var context = serviceProvider.GetRequiredService<AppDbContext>();
             MigrateDatabaseToLatestVersion.Execute(context, new DbMigrationsOptions
             {
                 ResetDatabaseSchema = true,

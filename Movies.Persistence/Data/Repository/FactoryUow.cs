@@ -8,11 +8,11 @@ namespace Movies.Persistence.Data.Repository;
 
 public class FactoryUow : IFactoryUow, IAsyncDisposable
 {
-    public AppDBContext AppContext { get; set; }
+    public AppDbContext AppContext { get; set; }
 
     private ConcurrentDictionary<string, dynamic>? _repositories;
 
-    public FactoryUow(AppDBContext appContext)
+    public FactoryUow(AppDbContext appContext)
     {
         AppContext = appContext;
         //if (!AppContext.Database.IsInMemory()) AppContext.Database.SetCommandTimeout(160);
@@ -37,7 +37,7 @@ public class FactoryUow : IFactoryUow, IAsyncDisposable
         return _repositories.GetOrAdd(typeof(T).Name, _ => Repository<T>(AppContext));
     }
 
-    private static IBase<T> Repository<T>(AppDBContext contextDb) where T : class, IEntity
+    private static IBase<T> Repository<T>(AppDbContext contextDb) where T : class, IEntity
     {
         Type? repositoryType = GetSubClassType(typeof(IBase<T>));
         if (repositoryType == null) return ((IBase<T>) Activator.CreateInstance(typeof(Base<T>), contextDb)!);
