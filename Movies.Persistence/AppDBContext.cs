@@ -32,8 +32,8 @@ public sealed class AppDbContext : DbContext
 
         var seedData = Database.GetService<ITestSeedsService>();
         var seedImdbUsers = seedData.GetImdbUsers(10);
-        var seedImdbActors = seedData.GetImdbActors(10);
+       // var seedImdbActors = seedData.GetImdbActors(10);
         modelBuilder.Entity<ImdbUser>().HasData(seedImdbUsers);
-        modelBuilder.Entity<Actor>().HasData(seedImdbActors);
+        //modelBuilder.Entity<Actor>().HasData(seedImdbActors);
     }
 }
