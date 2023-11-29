@@ -18,7 +18,7 @@ builder.Services.AddFluent();
 
 builder.Services.AddVersion();
 builder.Services.AddMvcCore().AddApiExplorer();
-builder.Services.AddVersionedApi();
+//builder.Services.AddVersionedApi();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwagger();

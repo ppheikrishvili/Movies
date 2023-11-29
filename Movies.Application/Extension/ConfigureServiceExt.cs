@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using Asp.Versioning;
+using FluentValidation;
 using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -67,17 +68,21 @@ public static class ConfigureServiceExt
             config.DefaultApiVersion = new ApiVersion(1, 0);
             config.AssumeDefaultVersionWhenUnspecified = true;
             config.ReportApiVersions = true;
-        });
+        }).AddApiExplorer(options =>
+        {
+            options.GroupNameFormat = "'v'VVV";
+            options.SubstituteApiVersionInUrl = true;
+        }); ;
     }
 
-    public static void AddVersionedApi(this IServiceCollection services)
-    {
-        services.AddVersionedApiExplorer(o =>
-        {
-            o.GroupNameFormat = "'v'VVV";
-            o.SubstituteApiVersionInUrl = true;
-        });
-    }
+    //public static void AddVersionedApi(this IServiceCollection services)
+    //{
+    //    services.AddVersionedApiExplorer(o =>
+    //    {
+    //        o.GroupNameFormat = "'v'VVV";
+    //        o.SubstituteApiVersionInUrl = true;
+    //    });
+    //}
 
     public static void AddSwagger(this IServiceCollection services)
     {
