@@ -11,16 +11,12 @@ using Newtonsoft.Json;
 
 namespace Movies.Infrastructure.Middleware;
 
-public class GlobalExceptionHandler : IMiddleware
+public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler>? logger) : IMiddleware
 {
-    private readonly ILogger<GlobalExceptionHandler>? _logger;
-
-    public GlobalExceptionHandler(ILogger<GlobalExceptionHandler>? logger) => _logger = logger;
-
     private async Task HandleExceptionAsync(HttpContext context, Exception ex)
     {
         string errorMessage = await ex.ToErrorStrAsync() ?? "";
-        _logger?.LogError("{Exception} details: {errorMessage}", nameof(Exception), errorMessage);
+        logger?.LogError("{Exception} details: {errorMessage}", nameof(Exception), errorMessage);
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
         await context.Response.WriteAsync(JsonConvert.SerializeObject(
@@ -46,7 +42,7 @@ public class GlobalExceptionHandler : IMiddleware
             using var responseBody = new MemoryStream();
             context.Response.Body = responseBody;
             await next(context);
-            _logger?.Log(LogLevel.Information,
+            logger?.Log(LogLevel.Information,
                 "Requested - {requestStr} {NewLine} Response - {FormatResponse}", requestStr, Environment.NewLine, await FormatResponse(context.Response));
             await responseBody.CopyToAsync(originalBodyStream).ConfigureAwait(false);
         }

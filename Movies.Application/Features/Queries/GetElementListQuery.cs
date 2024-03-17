@@ -20,13 +20,12 @@ namespace Movies.Application.Features.Queries;
 
 public record GetElementListQuery<T>(Expression<Func<T, bool>>? CondLambda = null) : IRequest<ResponseResult<List<T>>>;
 
-public class GetElementListHandler<T> : IRequestHandler<GetElementListQuery<T>, ResponseResult<List<T>>>
+public class GetElementListHandler<T>(IFactoryUow baseEntity)
+    : IRequestHandler<GetElementListQuery<T>, ResponseResult<List<T>>>
     where T : class, IEntity
 {
-    private readonly IFactoryUow _factoryUow;
-    public GetElementListHandler(IFactoryUow baseEntity) => _factoryUow = baseEntity;
     public async Task<ResponseResult<List<T>>> Handle(GetElementListQuery<T> request, CancellationToken cancellationToken)
         => new(
-            request.CondLambda != null ? await _factoryUow.Repository<T>().GetListAsync(request.CondLambda, cancellationToken)
-            : await _factoryUow.Repository<T>().GetListAsync(cancellationToken));
+            request.CondLambda != null ? await baseEntity.Repository<T>().GetListAsync(request.CondLambda, cancellationToken)
+            : await baseEntity.Repository<T>().GetListAsync(cancellationToken));
 }

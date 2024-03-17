@@ -2,11 +2,8 @@
 
 namespace Movies.Persistence.Data.Repository;
 
-public class ImdbUserData : Base<ImdbUser>
+public class ImdbUserData(AppDbContext context) : Base<ImdbUser>(context)
 {
-    public ImdbUserData(AppDbContext context) : base(context)
-    { }
-
     public override async Task<List<ImdbUser>> GetListAsync(CancellationToken token = default)
     {
         return await base.GetListAsync(token).ConfigureAwait(false);
