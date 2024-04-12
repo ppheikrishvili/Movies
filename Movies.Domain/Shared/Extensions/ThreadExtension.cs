@@ -6,8 +6,7 @@ public static class ThreadExtension
 {
     public static async Task RunExTask<T>(this Action<T> act, IEnumerable<T> list, CancellationToken token = default)
     {
-        SemaphoreSlim throttler =
-            new SemaphoreSlim(Convert.ToInt32(Math.Ceiling(Environment.ProcessorCount * 0.75 * 2.0)));
+        SemaphoreSlim throttler = new(Convert.ToInt32(Math.Ceiling(Environment.ProcessorCount * 0.75 * 2.0)));
         List<T[]> repLists = list.Chunk(10000).AsParallel().WithDegreeOfParallelism(
             Convert.ToInt32(Math.Ceiling(Environment.ProcessorCount * 0.75 * 2.0))).ToList();
         IEnumerable<Task> tasks = from partition in repLists.Select((jobs, i) => new {jobs, i})

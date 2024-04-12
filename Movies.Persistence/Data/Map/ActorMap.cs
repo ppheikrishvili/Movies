@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Movies.Domain.Entity;
 using Movies.Domain.Interface;
@@ -12,6 +11,6 @@ public class ActorMap : IBaseMapModel
     {
         EntityTypeBuilder<Actor> entityBuilder = mBuilder.Entity<Actor>();
         mBuilder.Entity<Actor>();
-        entityBuilder.HasKey(x => x.id);
+        entityBuilder.HasKey(x => x.Id);
     }
 }

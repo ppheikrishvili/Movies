@@ -5,12 +5,11 @@ using Movies.Domain.Shared.Enums;
 
 namespace Movies.Persistence.Data.Repository;
 
-public class Base<T> : IBase<T> where T : class, IEntity
+public class Base<T>(AppDbContext context) : IBase<T>
+    where T : class, IEntity
 {
-    public DbSet<T> DbSetEntity { get; set; }
-    public AppDbContext AppContext { get; set; }
-
-    public Base(AppDbContext context) => (AppContext, DbSetEntity) = (context, context.Set<T>());
+    public DbSet<T> DbSetEntity { get; set; } = context.Set<T>();
+    public AppDbContext AppContext { get; set; } = context;
 
     public async Task<int> CountAsync(Expression<Func<T, bool>> condLambda) =>
         await DbSetEntity.AsNoTracking().CountAsync(condLambda).ConfigureAwait(false);

@@ -6,17 +6,13 @@ using Movies.Domain.Interface;
 
 namespace Movies.Persistence.Data.Repository;
 
-public class FactoryUow : IFactoryUow, IAsyncDisposable
+public class FactoryUow(AppDbContext appContext) : IFactoryUow, IAsyncDisposable
 {
-    public AppDbContext AppContext { get; set; }
+    public AppDbContext AppContext { get; set; } = appContext;
 
     private ConcurrentDictionary<string, dynamic>? _repositories;
 
-    public FactoryUow(AppDbContext appContext)
-    {
-        AppContext = appContext;
-        //if (!AppContext.Database.IsInMemory()) AppContext.Database.SetCommandTimeout(160);
-    }
+    //if (!AppContext.Database.IsInMemory()) AppContext.Database.SetCommandTimeout(160);
 
     private static Type? GetSubClassType(Type baseT) => Assembly.GetCallingAssembly().GetTypes().FirstOrDefault(t =>
         baseT.IsAssignableFrom(t) && t is {IsAbstract: false, IsInterface: false});

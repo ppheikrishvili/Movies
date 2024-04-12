@@ -5,11 +5,9 @@ using Movies.Domain.Interface;
 
 namespace Movies.Persistence.Data.Repository.SqlExecute;
 
-public class SqlCommandDbContext : ISqlCommandDbContext
+public class SqlCommandDbContext(AppDbContext context) : ISqlCommandDbContext
 {
-    public AppDbContext AppContext { get; set; }
-
-    public SqlCommandDbContext(AppDbContext context) => AppContext = context;
+    public AppDbContext AppContext { get; set; } = context;
 
     public async Task<DataTable> SqlCommandExecuteReader(string sqlCommandText,
         CancellationToken cancellationToken = default)

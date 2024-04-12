@@ -72,7 +72,7 @@ public static class ConfigureServiceExt
         {
             options.GroupNameFormat = "'v'VVV";
             options.SubstituteApiVersionInUrl = true;
-        }); ;
+        });
     }
 
     //public static void AddVersionedApi(this IServiceCollection services)

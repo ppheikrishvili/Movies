@@ -1,5 +1,3 @@
 ﻿namespace Movies.Domain.Interface;
 
-public interface IEntity
-{
-}
+public interface IEntity;

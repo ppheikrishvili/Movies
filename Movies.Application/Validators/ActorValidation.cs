@@ -7,7 +7,7 @@ public class ActorValidation : AbstractValidator<Actor>
 {
     public ActorValidation()
     {
-        RuleFor(x => x.id).NotNull().NotEmpty();
+        RuleFor(x => x.Id).NotNull().NotEmpty();
         RuleFor(x => x.Name).NotEmpty().MaximumLength(150);
     }
 }
